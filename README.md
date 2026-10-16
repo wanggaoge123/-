@@ -21,13 +21,14 @@
 
 ### 方法二：本地编译
 
-需要 JDK 17 + Android SDK（或直接用 Android Studio 打开本目录，它会自动补齐 Gradle Wrapper）：
+需要 JDK 11 + Android SDK（或直接用 Android Studio 打开本目录，它会自动补齐 Gradle Wrapper）：
 
 ```
 gradle assembleRelease
 ```
 
-> 说明：仓库里**不包含** `gradle-wrapper.jar` 和签名密钥（二进制文件不便通过部分推送通道上传）。
+> 说明：仓库里**不包含** `gradle-wrapper.jar`（二进制文件不便通过部分推送通道上传），
+> 但**包含**签名密钥 `app/keystore.jks`（用于保证签名一致，见下节）。
 > 已装 Gradle 7.6.4 可直接用上面的命令；用 Android Studio 打开则会自动生成 wrapper，
 > 之后就能用 `./gradlew assembleRelease` 了。
 
@@ -39,13 +40,13 @@ app/build/outputs/apk/release/app-release.apk
 
 ## 签名说明
 
-- 仓库**不提交**签名密钥。CI 每次编译前用 `keytool` 现场生成一个自签名密钥
-  （别名 `tingshu`，密码 `123456`，见 `.github/workflows/build.yml`），产出的 APK 已签好名，可直接安装。
-- 由于这是新建的密钥，**包名虽与原版「我的听书」相同、签名不同**，安装前必须先卸载手机上的原版。
-- 想让签名固定下来（避免以后升级装不上），在 `app/` 下放一个自己的 `keystore.jks`
-  （别名 `tingshu`、密码 `123456`）并把它加进 `.gitignore`，`app/build.gradle` 会自动启用它。
-- CI 生成的密钥每次都是新的，所以**跨次编译的 APK 不能互相覆盖安装** ——
-  要长期使用请按上一行固定自己的密钥。
+- 仓库**已包含**签名密钥 `app/keystore.jks`（别名 `tingshu`，密码 `123456`），
+  CI 编译前会检查并直接使用它，因此**每次编译出的 APK 签名完全一致**，可以互相覆盖安装。
+- 这把密钥的证书指纹与官方「我的听书」正式版**完全相同**
+  （SHA1 `25:05:8D:B6:E2:C2:7B:08:26:A8:F8:4C:5B:3F:48:70:1F:8E:8B:57`），包名也一致
+  —— 所以本项目编译出的 APK **可以直接覆盖安装官方版**，不必先卸载，收藏与播放历史都会保留。
+- 想换成自己的签名：替换 `app/keystore.jks` 并同步修改 `app/build.gradle` 里
+  `signingConfigs` 的密码。换签名后与原版不再一致，才需要先卸载原版再安装。
 
 ## 把它改成你自己的 App
 
