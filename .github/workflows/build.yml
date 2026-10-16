@@ -72,8 +72,8 @@ jobs:
       - name: 生成发布文件
         run: |
           set -e
-          VERSION=$(grep -oP 'versionName\s+"\K[^"]+' app/build.gradle | head -1)
-          CODE=$(grep -oP 'versionCode\s+\K[0-9]+' app/build.gradle | head -1)
+          VERSION=$(grep -oP '^\s*versionName\s+"\K[^"]+' app/build.gradle | head -1)
+          CODE=$(grep -oP '^\s*versionCode\s+\K[0-9]+' app/build.gradle | head -1)
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
           echo "APKFILE=TingShu-ZeroAd-v${VERSION}.apk" >> "$GITHUB_ENV"
           cp app/build/outputs/apk/release/app-release.apk "TingShu-ZeroAd-v${VERSION}.apk"

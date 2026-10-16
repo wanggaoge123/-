@@ -10,8 +10,8 @@ android {
         applicationId "com.github.eprendre.tingshu"
         minSdk 21
         targetSdk 33
-        // 官方版当前为 versionCode 2600 / versionName 2.6.0。
-        // versionCode 必须高于 2600，否则在已装官方版的手机上属于「降级安装」，会被安卓直接拒绝。
+        // 官方版当前为 2600（2.6.0）。这里必须严格大于它，
+        // 否则在已装官方版的手机上属于「降级安装」，会被安卓拒绝。
         versionCode 2601
         versionName "2.6.1"
         multiDexEnabled true
