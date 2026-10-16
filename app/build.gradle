@@ -10,8 +10,10 @@ android {
         applicationId "com.github.eprendre.tingshu"
         minSdk 21
         targetSdk 33
-        versionCode 100
-        versionName "1.0.0"
+        // 官方版当前为 versionCode 2600 / versionName 2.6.0。
+        // versionCode 必须高于 2600，否则在已装官方版的手机上属于「降级安装」，会被安卓直接拒绝。
+        versionCode 2601
+        versionName "2.6.1"
         multiDexEnabled true
         kapt {
             arguments {
@@ -41,6 +43,11 @@ android {
                 storePassword '123456'
                 keyAlias 'tingshu'
                 keyPassword '123456'
+                // 三种签名方案全开，兼容 Android 5.0 ~ 最新系统
+                enableV1Signing true
+                enableV2Signing true
+                enableV3Signing true
+                enableV4Signing false
             }
         }
     }
