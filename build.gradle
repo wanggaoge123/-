@@ -1,6 +1,8 @@
 // 顶层构建文件
 buildscript {
-    ext.kotlin_version = '1.8.22'
+    // 注意：必须是 1.7.x —— 代码使用了 kotlinx.android.synthetic，
+    // 而 kotlin-android-extensions 插件在 Kotlin 1.8.0 已被官方移除。
+    ext.kotlin_version = '1.7.21'
     repositories {
         google()
         mavenCentral()
