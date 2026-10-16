@@ -8,7 +8,8 @@ import com.github.eprendre.tingshu.App
  * 书源可用的键值存储
  */
 object ExternalSourcePrefs {
-    private const val PREFS_FILENAME = "external_sources"
+    // 同 Prefs：换个独立文件名，避免读到官方版同名文件里类型不一致的值
+    private const val PREFS_FILENAME = "external_sources_zc"
     private val prefs: SharedPreferences by lazy {
         App.appContext.getSharedPreferences(PREFS_FILENAME, Context.MODE_PRIVATE)
     }
@@ -18,6 +19,11 @@ object ExternalSourcePrefs {
     }
 
     fun getString(key: String, defValue: String?): String? {
-        return prefs.getString(key, defValue)
+        return try {
+            prefs.getString(key, defValue)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            defValue
+        }
     }
 }

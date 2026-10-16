@@ -26,7 +26,7 @@ class SettingsActivity : AppCompatActivity() {
     class SettingsFragment : PreferenceFragmentCompat() {
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            preferenceManager.sharedPreferencesName = "tingshu.prefs"//和Prefs共用一个SharedPreferences
+            preferenceManager.sharedPreferencesName = "tingshu.prefs.zc"//和Prefs共用一个SharedPreferences
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
         }
 
