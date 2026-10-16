@@ -72,7 +72,15 @@ class TingShuService : Service() {
         // Build a PendingIntent that can be used to launch the UI.
 //        val sessionIntent = packageManager?.getLaunchIntentForPackage(packageName)
         val sessionIntent = Intent(this, PlayerActivity::class.java)
-        val sessionActivityPendingIntent = PendingIntent.getActivity(this, 0, sessionIntent, 0)
+        // Android 12(API 31) 起，targetSdk>=31 的 App 创建 PendingIntent 必须显式带
+        // FLAG_IMMUTABLE 或 FLAG_MUTABLE，否则直接抛 IllegalArgumentException 闪退。
+        val pendingIntentFlags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+        val sessionActivityPendingIntent =
+            PendingIntent.getActivity(this, 0, sessionIntent, pendingIntentFlags)
 
         // Create a new MediaSession.
         mediaSession = MediaSessionCompat(this, "TingShuService")

@@ -19,14 +19,19 @@ package com.github.eprendre.tingshu.widget
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.os.Build
+import android.view.KeyEvent
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.media.app.NotificationCompat.MediaStyle
 import androidx.media.session.MediaButtonReceiver
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PAUSE
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_PLAY
 import android.support.v4.media.session.PlaybackStateCompat.ACTION_SKIP_TO_NEXT
@@ -51,21 +56,50 @@ class NotificationBuilder(private val context: Context) {
     private val skipToPreviousAction = NotificationCompat.Action(
             R.drawable.exo_controls_previous,
             context.getString(R.string.notification_skip_to_previous),
-            MediaButtonReceiver.buildMediaButtonPendingIntent(context, ACTION_SKIP_TO_PREVIOUS))
+            mediaButtonPendingIntent(ACTION_SKIP_TO_PREVIOUS))
     private val playAction = NotificationCompat.Action(
             R.drawable.exo_controls_play,
             context.getString(R.string.notification_play),
-            MediaButtonReceiver.buildMediaButtonPendingIntent(context, ACTION_PLAY))
+            mediaButtonPendingIntent(ACTION_PLAY))
     private val pauseAction = NotificationCompat.Action(
             R.drawable.exo_controls_pause,
             context.getString(R.string.notification_pause),
-            MediaButtonReceiver.buildMediaButtonPendingIntent(context, ACTION_PAUSE))
+            mediaButtonPendingIntent(ACTION_PAUSE))
     private val skipToNextAction = NotificationCompat.Action(
             R.drawable.exo_controls_next,
             context.getString(R.string.notification_skip_to_next),
-            MediaButtonReceiver.buildMediaButtonPendingIntent(context, ACTION_SKIP_TO_NEXT))
-    private val stopPendingIntent =
-            MediaButtonReceiver.buildMediaButtonPendingIntent(context, ACTION_STOP)
+            mediaButtonPendingIntent(ACTION_SKIP_TO_NEXT))
+    private val stopPendingIntent = mediaButtonPendingIntent(ACTION_STOP)
+
+    /**
+     * 自己造媒体按钮的 PendingIntent，不再用 MediaButtonReceiver 的同名方法。
+     *
+     * 原因：androidx.media:media:1.2.1 里 `buildMediaButtonPendingIntent` 内部用的是
+     * `PendingIntent.getBroadcast(..., 0)`，没有 FLAG_IMMUTABLE；本项目 targetSdk 33，
+     * 在 Android 12+ 上会抛 IllegalArgumentException（S+ requires FLAG_IMMUTABLE or
+     * FLAG_MUTABLE）——而本类的属性初始化是在 TingShuService.onCreate 里跑的，
+     * 一启动就闪退。
+     *
+     * 另外给每个动作单独的 requestCode：requestCode 相同时（都是 0），
+     * 系统的 PendingIntent 匹配只看 action/data/type/component（不含 extras），
+     * 5 个按钮会被当成同一个 PendingIntent，实测会串键。
+     */
+    private fun mediaButtonPendingIntent(action: Long): PendingIntent? {
+        val keyCode = PlaybackStateCompat.toKeyCode(action)
+        if (keyCode == KeyEvent.KEYCODE_UNKNOWN) {
+            return null
+        }
+        val intent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+            setComponent(ComponentName(context, MediaButtonReceiver::class.java))
+            putExtra(Intent.EXTRA_KEY_EVENT, KeyEvent(KeyEvent.ACTION_DOWN, keyCode))
+        }
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+        return PendingIntent.getBroadcast(context, keyCode, intent, flags)
+    }
 
     fun buildNotification(sessionToken: MediaSessionCompat.Token): Notification {
         if (shouldCreateNowPlayingChannel()) {
