@@ -1,0 +1,57 @@
+name: Build APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: 云端编译 APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 设置 JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 安装 Gradle 7.6.4
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '7.6.4'
+
+      - name: 生成签名密钥
+        run: |
+          keytool -genkeypair -v \
+            -keystore app/keystore.jks \
+            -storetype JKS \
+            -alias tingshu \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass 123456 \
+            -keypass 123456 \
+            -dname "CN=tingshu, OU=dev, O=tingshu, L=Beijing, ST=Beijing, C=CN"
+          ls -l app/keystore.jks
+
+      - name: 编译 Release APK
+        run: gradle :app:assembleRelease --no-daemon --stacktrace
+
+      - name: 列出产物
+        if: always()
+        run: find app/build/outputs -type f -name "*.apk" 2>/dev/null || true
+
+      - name: 上传 APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tingshu-release-apk
+          path: app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
