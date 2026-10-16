@@ -40,11 +40,12 @@ proguard/
 captures/
 
 # Keystore files
-# 本项目不提交签名密钥（CI 用 keytool 现场生成，见 .github/workflows/build.yml）。
-# 若你想固定自己的签名，把 keystore.jks 放进 app/ 即可，下面这行会保证它不被提交。
-app/keystore.jks
+# 本项目**刻意提交**签名密钥，以保证每次云端编译出的 APK 签名一致、可直接覆盖安装。
+# 想换签名：替换 app/keystore.jks，并同步改 app/build.gradle 里的密码。
+# （例外规则必须放在忽略规则之后才生效）
 *.jks
 *.keystore
+!app/keystore.jks
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
