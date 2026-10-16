@@ -503,7 +503,7 @@ class PlayerActivity : AppCompatActivity(), AnkoLogger {
                     //如果已收藏设置图标为实心
                     favoriteItem.setIcon(R.drawable.ic_favorite)
                     toolbarIconColor?.let { color ->
-                        favoriteItem.icon.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+                        favoriteItem.icon?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
                     }
                     favoriteBook = book
                 }, onError = { e ->
@@ -511,7 +511,7 @@ class PlayerActivity : AppCompatActivity(), AnkoLogger {
                     if (e is EmptyResultSetException) {
                         favoriteItem.setIcon(R.drawable.ic_favorite_border)
                         toolbarIconColor?.let { color ->
-                            favoriteItem.icon.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+                            favoriteItem.icon?.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
                         }
                         favoriteBook = null
                     }

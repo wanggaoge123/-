@@ -6,7 +6,14 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import com.github.eprendre.tingshu.App
 import com.github.eprendre.tingshu.R
+import com.github.eprendre.tingshu.extensions.albumArt
+import com.github.eprendre.tingshu.extensions.artist
+import com.github.eprendre.tingshu.extensions.displaySubtitle
+import com.github.eprendre.tingshu.extensions.displayTitle
+import com.github.eprendre.tingshu.extensions.downloadStatus
 import com.github.eprendre.tingshu.extensions.getBitmapFromVectorDrawable
+import com.github.eprendre.tingshu.extensions.mediaUri
+import com.github.eprendre.tingshu.extensions.title
 import com.github.eprendre.tingshu.extensions.toMediaSource
 import com.github.eprendre.tingshu.utils.Prefs
 import com.google.android.exoplayer2.ExoPlayer
@@ -49,7 +56,7 @@ object PlaybackBridge {
                     mediaUri = audioUrl
                     displayTitle = bookName
                     displaySubtitle = Prefs.artist
-                    downloadStatus = MediaDescriptionCompat.STATUS_NOT_DOWNLOADED
+                    downloadStatus = MediaDescriptionCompat.STATUS_NOT_DOWNLOADED.toLong()
                     albumArt = art
                 }
                 .build()
