@@ -12,14 +12,14 @@
 
 安装步骤：
 
-1. 手机上点开上面的链接 → 页面底部 **Assets** 区域 → 点 `TingShu-ZeroAd-v2.6.2.apk` 开始下载
+1. 手机上点开上面的链接 → 页面底部 **Assets** 区域 → 点 `TingShu-ZeroAd-v2.6.3.apk` 开始下载
 2. **等下载彻底完成**（文件约 7.6 MB，可对照同页 `SHA256SUMS.txt` 校验哈希）
 3. 点开 APK 安装；若提示「未知来源 / 外部来源应用」，在系统设置里允许浏览器或文件管理器安装应用
 4. 已装官方版「我的听书」的**可以直接覆盖安装**，无需先卸载（签名与官方完全相同）
 
 > ⚠️ 装不上时先看两条：
 > - **文件没下完整**是安卓报「解析软件包时出现问题」最常见的原因 —— 重新下载，或用下载工具下载后比对 SHA-256
-> - 本版 versionCode 是 **2602**，高于官方 v2.6.0（2600），所以能覆盖安装；若你手机上装的是**更新的官方版本**（比如 2.6.3+），得先卸载官方版再装本版
+> - 本版 versionCode 是 **2603**，高于官方 v2.6.0（2600），所以能覆盖安装；若你手机上装的是**更新的官方版本**（比如 2.6.4+），得先卸载官方版再装本版
 
 ## 这是什么
 
@@ -31,13 +31,14 @@
 
 | 项目 | 本版 | 官方版 |
 |---|---|---|
-| versionCode | **2602** | 2600 |
-| versionName | **2.6.2** | 2.6.0 |
+| versionCode | **2603** | 2600 |
+| versionName | **2.6.3** | 2.6.0 |
 | 包名 | `com.github.eprendre.tingshu` | 同左 |
 | 签名证书 SHA1 | `25:05:8D:B6:E2:C2:7B:08:26:A8:F8:4C:5B:3F:48:70:1F:8E:8B:57` | 同左 |
 
 ### 版本记录
 
+- **2.6.3**：再修启动闪退。`MediaSessionCompat(this, tag)` 两参构造内部会用 flags=0 建 PendingIntent.getBroadcast（androidx.media 1.2.1 的坑），改成显式传入接收者组件 + FLAG_IMMUTABLE 的 PendingIntent。
 - **2.6.2**：修**启动闪退**。`TingShuService.onCreate` / `NotificationBuilder` 创建 `PendingIntent` 时没带 `FLAG_IMMUTABLE`，
   targetSdk 33 的 App 在 Android 12+ 上会直接抛 `IllegalArgumentException`（这个 Service 由 MainActivity 一启动就拉起，
   所以症状就是点开就闪退）。顺带把 Room 库文件名从 `book-db` 改为 `book-db-zc`，避免与官方版库结构冲突导致崩溃。

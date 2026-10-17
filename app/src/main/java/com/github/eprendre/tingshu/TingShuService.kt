@@ -3,6 +3,7 @@ package com.github.eprendre.tingshu
 import android.app.PendingIntent
 import android.app.Service
 import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -83,7 +84,23 @@ class TingShuService : Service() {
             PendingIntent.getActivity(this, 0, sessionIntent, pendingIntentFlags)
 
         // Create a new MediaSession.
-        mediaSession = MediaSessionCompat(this, "TingShuService")
+        // 注意：不能用两参构造 MediaSessionCompat(this, tag)——它内部会用 flags=0 调
+        // PendingIntent.getBroadcast 建媒体按钮的 PendingIntent（androidx.media 1.2.1 的老代码），
+        // 在 Android 12+ 上同样抛 IllegalArgumentException 闪退（TingShuService.kt:86 那个崩就是它）。
+        // 把「接收者组件 + 带 FLAG_IMMUTABLE 的 PendingIntent」显式传进去，库内部就不会自己建了。
+        val mediaButtonReceiverComponent = ComponentName(this, MediaButtonReceiver::class.java)
+        val mediaButtonReceiverIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+            setComponent(mediaButtonReceiverComponent)
+        }
+        val mediaButtonReceiverPendingIntent = PendingIntent.getBroadcast(
+            this, 1, mediaButtonReceiverIntent, pendingIntentFlags
+        )
+        mediaSession = MediaSessionCompat(
+            this,
+            "TingShuService",
+            mediaButtonReceiverComponent,
+            mediaButtonReceiverPendingIntent
+        )
             .apply {
                 setSessionActivity(sessionActivityPendingIntent)
                 isActive = true

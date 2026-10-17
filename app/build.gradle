@@ -12,8 +12,8 @@ android {
         targetSdk 33
         // 官方版当前为 2600（2.6.0）。这里必须严格大于它，
         // 否则在已装官方版的手机上属于「降级安装」，会被安卓拒绝。
-        versionCode 2602
-        versionName "2.6.2"
+        versionCode 2603
+        versionName "2.6.3"
         multiDexEnabled true
         kapt {
             arguments {
