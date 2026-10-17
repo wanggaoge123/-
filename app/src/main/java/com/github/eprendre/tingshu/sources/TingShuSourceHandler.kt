@@ -58,7 +58,10 @@ object TingShuSourceHandler {
      * 根据链接判断属于哪个源
      */
     fun findSource(url: String): TingShu {
-        return allSources.firstOrNull { it.getUrl().isNotBlank() && url.startsWith(it.getUrl()) }
+        // 取「最长前缀」匹配，避免 https://a.com/ 抢先匹配 https://a.com/sub 的情况
+        return allSources
+            .filter { it.getUrl().isNotBlank() && url.startsWith(it.getUrl()) }
+            .maxByOrNull { it.getUrl().length }
             ?: currentSource
     }
 

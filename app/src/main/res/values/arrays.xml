@@ -1,76 +1,19 @@
 <resources>
+    <!-- 2026-10：只保留实测仍可用的站点，顺序与 SourceEntry.getSources() 保持一致 -->
     <string-array name="source_entries">
-        <item>爱听书</item>
-        <item>哔哩哔哩</item>
-        <item>博看有声</item>
-        <item>电视直播</item>
-        <item>海洋听书网</item>
-        <item>幻听网</item>
-        <item>洛奇Town</item>
-        <item>经典老歌</item>
-        <item>机核 GCORES</item>
-        <item>静听网</item>
-        <item>聚听网</item>
-        <item>口袋微课堂</item>
         <item>酷我畅听</item>
-        <item>懒人听书</item>
-        <item>恋听网</item>
-        <item>LibriVox 测试</item>
-        <item>六听网</item>
-        <item>456听书网</item>
-        <item>56听书网</item>
-        <item>麻辣听书</item>
-        <item>芒果听书</item>
-        <item>声波FM</item>
-        <item>搜狗阅读</item>
-        <item>听中国</item>
-        <item>74听书</item>
-        <item>听书宝</item>
+        <item>哔哩哔哩</item>
+        <item>机核 GCORES</item>
         <item>声音巴士</item>
-        <item>520听书网v2</item>
-        <item>我爱听评书网</item>
-        <item>心魔听书</item>
-        <item>有声小说吧</item>
-        <item>有兔阅读</item>
-        <item>云图有声</item>
-        <item>中版有声书</item>
+        <item>LibriVox 测试</item>
     </string-array>
 
     <string-array name="source_values">
-        <item>5267b4570f7e45f2903678227d2e7b44</item>
-        <item>c893546d95f84db194046bd8de5dbcbb</item>
-        <item>c98a21452583434da5cfef8be16b71d6</item>
-        <item>150173b652964f71806264c07245587d</item>
-        <item>fc7a225fc7414567a87b8118e105eb56</item>
-        <item>63bbe587eae94cedb15e80d2c8689805</item>
-        <item>e342700214a9450791c32f55d1f9fb78</item>
-        <item>af69db7d4f284caabbeb51a30e05017e</item>
-        <item>c6672f095d1248b58898c379d8989306</item>
-        <item>ec9440c632b04292b0836004434eecc7</item>
-        <item>7d8edaa3b3e44485a2b8a8151cf5d84a</item>
-        <item>578c6258c0ee4701b80a7135477cf685</item>
         <item>502efedf0613460a9967d9e86ce2b24c</item>
-        <item>4a3ed84e5cf841609ed4d7f790fc7fbf</item>
-        <item>5caf7568d5f64406822e3a41364a016c</item>
-        <item>b722b6d38f1a4a25b453e8f84e5e331a</item>
-        <item>3fb16598bb214631807e2000e08c746c</item>
-        <item>ba2346b90bc64a66bdae51388ade480a</item>
-        <item>0ea16a8a11fb4d1b93550d059b5f1b5a</item>
-        <item>0e2f8065189e417f9b200d8e37ee9d91</item>
-        <item>34297649ff264078833e6283b496e6ed</item>
-        <item>51047efa852e449da5f3144c1a46c9d8</item>
-        <item>5beb88fbabb74ab4b8ac264bce2f14cb</item>
-        <item>5027db6a06934655a73aa99945034c97</item>
-        <item>e23e50167d0847278320a7204adb088c</item>
-        <item>4c099c03129640fe8416d920ea6ae842</item>
+        <item>c893546d95f84db194046bd8de5dbcbb</item>
+        <item>c6672f095d1248b58898c379d8989306</item>
         <item>405d26b44ad24b25a450ede64bac682f</item>
-        <item>2f7c45c8fd1141e9a433e062afbd6f5a</item>
-        <item>cc41d56926064805b0393780ec758e2a</item>
-        <item>1c835d8272a74716b82758dd2422594c</item>
-        <item>c242639e0cea4abeade8b9729f03ba0b</item>
-        <item>41aa5aff6ee54089a09ef74a4adb3a77</item>
-        <item>ab0a5474cd6a40e3ba65045addad390a</item>
-        <item>e6b1890ef87e4f3682c68de3359a1397</item>
+        <item>b722b6d38f1a4a25b453e8f84e5e331a</item>
     </string-array>
 
     <string-array name="play_speed">
